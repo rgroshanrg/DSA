@@ -44,6 +44,20 @@ Node* insert(Node* root, int data) {
     }
     return root;
 }
+
+int height(Node *root) {
+    if(root == NULL)
+        return 0;
+    int left_height = height(root->left);
+    int right_height = height(root->right);
+    int height;
+    if(left_height > right_height)
+        height = left_height+1;
+    else 
+        height = right_height+1;
+    return height;
+}
+
 void preorder(Node* root) {
     if(root == NULL)
         return;
@@ -101,11 +115,11 @@ Node* findParent(Node *root, Node *child) {
     }
     return NULL;
 }
-void del(Node *root, int data) {
-    // if(root->data == data && !root->left && !root->right) {
-    //     delete root;
-    //     return;
-    // }
+Node* del(Node *root, int data) {
+    if(root->data == data && !root->left && !root->right) {
+        delete root;
+        return NULL;
+    }
 
     queue<Node*> Q;
     Q.push(root);
@@ -136,14 +150,33 @@ void del(Node *root, int data) {
             delete temp;
         }        
     }
+    return root;
 }
 int main() {
     Node *root = NULL;
 
+    root = insert(root, 1);
+    root = insert(root, 2);
+    root = insert(root, 3);
+    root = insert(root, 4);
+    root = insert(root, 5);
+    root = insert(root, 6);
+    root = insert(root, 7);
+    root = insert(root, 8);
+    root = insert(root, 9);
     root = insert(root, 10);
+    root = insert(root, 11);
+    root = insert(root, 12);
+    root = insert(root, 13);
+    root = insert(root, 14);
+    root = insert(root, 15);
+    root = del(root, 11);
+    root = del(root, 12);
+    root = del(root, 13);
+    root = del(root, 14);
+    root = del(root, 15);
     levelorder(root); cout<<endl;
-    del(root, 10);
-    levelorder(root); cout<<endl;
+    cout<< height(root) <<endl;
     // inorder(root);
     return 0;
 }
