@@ -6,7 +6,7 @@
 using namespace std;
 
 void bfs(vector<int> G[], int n, int src) {
-    bool visited[n] = {false};
+    bool visited[n+1] = {false};
     if(src < 1 || src > n) {
         cout << "BFS Source Vertex Invalid\n";
         return;
@@ -25,6 +25,44 @@ void bfs(vector<int> G[], int n, int src) {
             }
         }
     } cout << "\n";
+}
+
+void printDFS(vector<int> G[], bool visited[], int n, int src) {
+    cout << src << " ";
+    visited[src] = true;
+    for(auto i : G[src])
+        if(!visited[i])
+            printDFS(G, visited, n, i);
+}
+
+void dfs(vector<int> G[], int n, int src) {
+    if(src < 1 || src > n) {
+        cout << "DFS Source Vertex Invalid\n";
+        return;
+    }
+    bool visited[n+1] = {false};
+    printDFS(G, visited, n, src); cout << "\n";
+}
+
+// Number of Disconected Components in the graph
+
+
+void dfsForComponents(vector<int> G[], bool visited[], int n, int src) {    // It is same as printDFS except cout statement
+    visited[src] = true;
+    for(auto i : G[src])
+        if(!visited[i])
+            dfsForComponents(G, visited, n, i);
+}
+int numberOfComponents(vector<int> G[], int n) {
+    bool visited[n+1] = {false};
+    int count = 0;
+    for(int i = 1; i <= n; ++i) {
+        if(!visited[i]) {
+            count++;
+            dfsForComponents(G, visited, n, i);
+        }
+    }
+    return count;
 }
 
 int main() {
@@ -52,7 +90,8 @@ int main() {
         G[u].push_back(v);
         G[v].push_back(u);
     }
-    bfs(G, n, 1);
+    // dfs(G, n, 1);
+    cout << numberOfComponents(G, n);
 
     return 0;
 }
