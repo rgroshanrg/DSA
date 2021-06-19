@@ -3,7 +3,7 @@
 #include <stack>
 using namespace std;
 
-class Node {    
+class Node {
     public :
         int data;
         Node *left;
@@ -65,6 +65,7 @@ void preorder(Node* root) {
     preorder(root->left);
     preorder(root->right);
 }
+
 void inorder(Node* root) {
     if(root == NULL)
         return;
@@ -96,6 +97,7 @@ void levelorder(Node* root) {
             Q.push(temp->right);        
     }
 }
+
 Node* findParent(Node *root, Node *child) {
     queue<Node*> Q;
     Q.push(root);
@@ -115,6 +117,7 @@ Node* findParent(Node *root, Node *child) {
     }
     return NULL;
 }
+
 Node* del(Node *root, int data) {
     if(root->data == data && !root->left && !root->right) {
         delete root;
@@ -152,9 +155,71 @@ Node* del(Node *root, int data) {
     }
     return root;
 }
+
+Node* maxNode(Node* root) {
+    if(root == NULL)
+        return NULL;
+    Node* maxNode = root;
+    queue<Node*> Q;
+    Q.push(root);
+    while(!Q.empty()) {
+        Node* temp = Q.front();
+        Q.pop();
+        if(temp->data > maxNode->data) {
+            maxNode = temp;
+        }
+        if(temp->left)
+            Q.push(temp->left);
+        if(temp->right)
+            Q.push(temp->right);
+    }
+    return maxNode;
+}
+
+Node* minNode(Node* root) {
+    if(root == NULL)
+        return NULL;
+    queue<Node*> Q;
+    Q.push(root);
+    Node* minNode = root;
+    while(!Q.empty()) {
+        Node* temp = Q.front();
+        Q.pop();
+        if(temp->data < minNode->data) {
+            minNode = temp;
+        }
+        if(temp->left)
+            Q.push(temp->left);
+        if(temp->right)
+            Q.push(temp->right);
+    }
+    return minNode;
+}
+
+Node* search(Node* root, int key) {
+    if(root == NULL)
+        return NULL;
+    queue<Node*> Q;
+    Q.push(root);
+    while(!Q.empty()) {
+        Node* temp = Q.front();
+        Q.pop();
+        if(temp->data == key)
+            return temp;
+        if(temp->left)
+            Q.push(temp->left);
+        if(temp->right)
+            Q.push(temp->right);
+    }
+    return NULL;
+}
+
 int main() {
     Node *root = NULL;
-
+    root = insert(root, 11);
+    root = insert(root, 12);
+    root = insert(root, 13);
+    root = insert(root, 14);
     root = insert(root, 1);
     root = insert(root, 2);
     root = insert(root, 3);
@@ -165,10 +230,7 @@ int main() {
     root = insert(root, 8);
     root = insert(root, 9);
     root = insert(root, 10);
-    root = insert(root, 11);
-    root = insert(root, 12);
-    root = insert(root, 13);
-    root = insert(root, 14);
+    
     root = insert(root, 15);
     root = del(root, 11);
     root = del(root, 12);
@@ -176,7 +238,8 @@ int main() {
     root = del(root, 14);
     root = del(root, 15);
     levelorder(root); cout<<endl;
-    cout<< height(root) <<endl;
+    cout<< maxNode(root)->data <<endl;
+    cout<< minNode(root)->data <<endl;
     // inorder(root);
     return 0;
 }
